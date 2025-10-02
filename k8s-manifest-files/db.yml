@@ -72,3 +72,5 @@ spec:
         resources:
           requests:
             storage: 7Gi
+  nodeSelector: 
+    node: app
