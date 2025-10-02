@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+  namespace: db
+  labels:
+    app: mysql
+  type: Opaque
+  data:
+    db_username:  
+    db_password: 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: db
+  labels:
+    app: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      name: mysql
+  clusterIP: None  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-ext
+  namespace: db
+  labels:
+    app: mysql
+spec: 
+  selector:
+    app: mysql
+  ports: 
+    - port: 3306
+      targetPort: 3306
+    
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: db
+  labels:
+    app: mysql
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template: 
+    metadata:
+      labels:
+        app: mysql
+    spec: 
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports: 
+          - containerport: 3306
+            name: mysql
+        volumeMounts: 
+          - name: data
+            mountPath: /var/lib/mysql
+  volumeClaimTemplates: 
+    - metadata: 
+        name: data
+      spec: 
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: ebs-storageClass
+        resources:
+          requests:
+            storage: 7Gi
