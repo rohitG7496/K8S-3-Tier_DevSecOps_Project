@@ -23,6 +23,8 @@ metadata:
   labels:
     app: mysql
 spec: 
+  nodeSelector:
+    node: app
   selector:
     app: mysql
   ports: 
@@ -38,6 +40,8 @@ metadata:
   labels:
     app: mysql
 spec:
+  nodeSelector: 
+    node: app
   serviceName: mysql
   replicas: 1
   selector:
@@ -72,5 +76,4 @@ spec:
         resources:
           requests:
             storage: 7Gi
-  nodeSelector: 
-    node: app
+  

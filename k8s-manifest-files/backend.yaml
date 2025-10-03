@@ -63,7 +63,9 @@ kind: Service
 metadata: 
   name: backend-svc
   namespace: app
-spec: 
+spec:
+  nodeSelector:
+    node: app
   selector:
     app: backend
   ports:

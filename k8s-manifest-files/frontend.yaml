@@ -16,13 +16,13 @@ spec:
       labels:
         app: frontend
     spec:
+      nodeSelector:
+        node: app
       containers:
         - name: frontend
           image: rohit7496/frontend:latest
           ports:
             - containerPort: 80
-    nodeSelector: 
-      node: app
     
 ---
 apiVersion: v1
@@ -31,6 +31,8 @@ metadata:
   name: frontend-svc
   namespace: app
 spec: 
+  nodeSelector:
+    node: app
   selector:
     app: frontend
   ports:
