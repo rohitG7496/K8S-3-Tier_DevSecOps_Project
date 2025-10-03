@@ -40,8 +40,6 @@ metadata:
   labels:
     app: mysql
 spec:
-  nodeSelector: 
-    node=app
   serviceName: mysql
   replicas: 1
   selector:
@@ -52,6 +50,8 @@ spec:
       labels:
         app: mysql
     spec: 
+      nodeSelector:
+        node=app
       containers:
       - name: mysql
         image: mysql:8.0

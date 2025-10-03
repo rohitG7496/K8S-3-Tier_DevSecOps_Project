@@ -64,8 +64,6 @@ metadata:
   name: backend-svc
   namespace: app
 spec:
-  nodeSelector:
-    node=app
   selector:
     app: backend
   ports:

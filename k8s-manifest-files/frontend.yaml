@@ -31,8 +31,6 @@ metadata:
   name: frontend-svc
   namespace: app
 spec: 
-  nodeSelector:
-    node=app
   selector:
     app: frontend
   ports:
