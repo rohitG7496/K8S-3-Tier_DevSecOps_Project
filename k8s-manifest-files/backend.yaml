@@ -29,7 +29,7 @@ spec:
         app: backend
   spec:
     nodeSelector:
-      node: app
+      node=app
     containers:
       - name: backend
         image: rohit7496/backend:latest
@@ -65,7 +65,7 @@ metadata:
   namespace: app
 spec:
   nodeSelector:
-    node: app
+    node=app
   selector:
     app: backend
   ports:

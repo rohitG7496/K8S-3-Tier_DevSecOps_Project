@@ -17,7 +17,7 @@ spec:
         app: frontend
     spec:
       nodeSelector:
-        node: app
+        node=app
       containers:
         - name: frontend
           image: rohit7496/frontend:latest
@@ -32,7 +32,7 @@ metadata:
   namespace: app
 spec: 
   nodeSelector:
-    node: app
+    node=app
   selector:
     app: frontend
   ports:

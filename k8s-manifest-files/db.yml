@@ -24,7 +24,7 @@ metadata:
     app: mysql
 spec: 
   nodeSelector:
-    node: app
+    node=app
   selector:
     app: mysql
   ports: 
@@ -41,7 +41,7 @@ metadata:
     app: mysql
 spec:
   nodeSelector: 
-    node: app
+    node=app
   serviceName: mysql
   replicas: 1
   selector:
