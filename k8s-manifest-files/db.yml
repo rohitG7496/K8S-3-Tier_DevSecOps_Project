@@ -1,4 +1,50 @@
 ---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: db
+  labels:
+    app: mysql
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template: 
+    metadata:
+      labels:
+        app: mysql
+    spec: 
+      nodeSelector:
+        node: app
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports: 
+          - containerPort: 3306
+            name: mysql
+        volumeMounts: 
+          - name: data
+            mountPath: /var/lib/mysql
+        env: 
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: mysql_root_password
+  volumeClaimTemplates: 
+    - metadata: 
+        name: data
+      spec: 
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: ebs-storageClass
+        resources:
+          requests:
+            storage: 7Gi
+  
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,57 +69,8 @@ metadata:
   labels:
     app: mysql
 spec: 
-  nodeSelector:
-    node=app
   selector:
     app: mysql
   ports: 
     - port: 3306
       targetPort: 3306
-    
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mysql
-  namespace: db
-  labels:
-    app: mysql
-spec:
-  serviceName: mysql
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mysql
-  template: 
-    metadata:
-      labels:
-        app: mysql
-    spec: 
-      nodeSelector:
-        node=app
-      containers:
-      - name: mysql
-        image: mysql:8.0
-        ports: 
-          - containerport: 3306
-            name: mysql
-        volumeMounts: 
-          - name: data
-            mountPath: /var/lib/mysql
-        env: 
-          - name: MYSQL_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: mysql_root_password
-  volumeClaimTemplates: 
-    - metadata: 
-        name: data
-      spec: 
-        accessModes: [ "ReadWriteOnce" ]
-        storageClassName: ebs-storageClass
-        resources:
-          requests:
-            storage: 7Gi
-  
