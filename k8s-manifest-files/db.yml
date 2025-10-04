@@ -1,11 +1,19 @@
 ---
-apiVersion: storage.k8s.io/v1 
-kind: StorageClass
-metadata: 
-  name: ebs
-provisioner: ebs.csi.aws.com
-reclaimPolicy: Retain
-volumeBindingMode: WaitForFirstConsumer
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 7Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ebs
+  fsType: ext4  
+  csi:
+    driver: ebs.csi.aws.com
+    volumeHandle: vol-01f6efaf3c5a92541
 
 ---
 apiVersion: apps/v1
