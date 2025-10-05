@@ -2,18 +2,43 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: mysql
 spec:
   capacity:
     storage: 7Gi
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: ebs
-  fsType: ext4  
+    - ReadWriteOnce  
   csi:
     driver: ebs.csi.aws.com
-    volumeHandle: vol-01f6efaf3c5a92541
+    fsType: ext4
+    volumeHandle: vol-07fae64c66b136b5f
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: db
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+  clusterIP: None  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-ext
+  namespace: db
+spec: 
+  selector:
+    app: mysql
+  ports: 
+    - port: 3306
+      targetPort: 3306
 
 ---
 apiVersion: apps/v1
@@ -24,11 +49,11 @@ metadata:
   labels:
     app: mysql
 spec:
-  serviceName: mysql
-  replicas: 1
   selector:
     matchLabels:
       app: mysql
+  serviceName: mysql
+  replicas: 1    
   template: 
     metadata:
       labels:
@@ -61,33 +86,3 @@ spec:
           requests:
             storage: 7Gi
   
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-  namespace: db
-  labels:
-    app: mysql
-spec:
-  selector:
-    app: mysql
-  ports:
-    - port: 3306
-      name: mysql
-  clusterIP: None  
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql-ext
-  namespace: db
-  labels:
-    app: mysql
-spec: 
-  selector:
-    app: mysql
-  ports: 
-    - port: 3306
-      targetPort: 3306
