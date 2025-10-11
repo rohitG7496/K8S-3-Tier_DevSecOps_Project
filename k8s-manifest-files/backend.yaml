@@ -60,7 +60,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata: 
-  name: backend-svc
+  name: backend
   namespace: db
 spec:
   selector:
@@ -69,3 +69,26 @@ spec:
     - port: 5000
       targetPort: 5000
   type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-ingress
+  namespace: db
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: dev.jnrpro.solutions
+      http: 
+        paths: 
+          - path: /api
+            pathType: Prefix
+            backend: 
+              service:
+                name: backend
+                port: 
+                  number: 5000
