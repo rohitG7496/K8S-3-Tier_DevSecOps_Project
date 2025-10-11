@@ -7,7 +7,7 @@ metadata:
 data:
   DB_HOST: mysql
   DB_USER: root
-  DB_NAME: 3_tier_app
+  DB_NAME: prod_db
 
 ---
 apiVersion: apps/v1
