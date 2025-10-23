@@ -15,12 +15,11 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx
   namespace: ingress-nginx
 ---
 apiVersion: v1
-automountServiceAccountToken: true
 kind: ServiceAccount
 metadata:
   labels:
@@ -28,7 +27,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
   namespace: ingress-nginx
 ---
@@ -40,7 +39,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx
   namespace: ingress-nginx
 rules:
@@ -130,7 +129,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
   namespace: ingress-nginx
 rules:
@@ -149,7 +148,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx
 rules:
 - apiGroups:
@@ -231,7 +230,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
 rules:
 - apiGroups:
@@ -250,7 +249,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx
   namespace: ingress-nginx
 roleRef:
@@ -270,7 +269,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
   namespace: ingress-nginx
 roleRef:
@@ -289,7 +288,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -308,7 +307,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -321,7 +320,7 @@ subjects:
 ---
 apiVersion: v1
 data:
-  use-proxy-protocol: "true"
+  allow-snippet-annotations: "true"
 kind: ConfigMap
 metadata:
   labels:
@@ -329,25 +328,22 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-controller
   namespace: ingress-nginx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.beta.kubernetes.io/scw-loadbalancer-proxy-protocol-v2: "true"
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
-  externalTrafficPolicy: Local
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
@@ -366,7 +362,7 @@ spec:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
@@ -376,7 +372,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-controller-admission
   namespace: ingress-nginx
 spec:
@@ -385,6 +381,10 @@ spec:
     name: https-webhook
     port: 443
     targetPort: webhook
+  - name: agentport
+    port: 5000
+    targetPort: 5000
+    protocol: TCP  
   selector:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -399,7 +399,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
@@ -410,10 +410,6 @@ spec:
       app.kubernetes.io/component: controller
       app.kubernetes.io/instance: ingress-nginx
       app.kubernetes.io/name: ingress-nginx
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -421,14 +417,13 @@ spec:
         app.kubernetes.io/instance: ingress-nginx
         app.kubernetes.io/name: ingress-nginx
         app.kubernetes.io/part-of: ingress-nginx
-        app.kubernetes.io/version: 1.12.1
+        app.kubernetes.io/version: 1.8.1
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - args:
         - /nginx-ingress-controller
-        - --publish-service=$(POD_NAMESPACE)/ingress-nginx-controller
         - --election-id=ingress-nginx-leader
         - --controller-class=k8s.io/ingress-nginx
         - --ingress-class=nginx
@@ -436,6 +431,8 @@ spec:
         - --validating-webhook=:8443
         - --validating-webhook-certificate=/usr/local/certificates/cert
         - --validating-webhook-key=/usr/local/certificates/key
+        - --tcp-services-configmap=ingress-nginx/agentport
+        - --enable-metrics
         env:
         - name: POD_NAME
           valueFrom:
@@ -447,7 +444,7 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_PRELOAD
           value: /usr/local/lib/libmimalloc.so
-        image: registry.k8s.io/ingress-nginx/controller:v1.12.1@sha256:d2fbc4ec70d8aa2050dd91a91506e998765e86c96f32cffb56c503c9c34eed5b
+        image: registry.k8s.io/ingress-nginx/controller:v1.8.1@sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd
         imagePullPolicy: IfNotPresent
         lifecycle:
           preStop:
@@ -475,6 +472,8 @@ spec:
         - containerPort: 8443
           name: webhook
           protocol: TCP
+        - name: prometheus
+          containerPort: 9113
         readinessProbe:
           failureThreshold: 3
           httpGet:
@@ -490,18 +489,13 @@ spec:
             cpu: 100m
             memory: 90Mi
         securityContext:
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: true
           capabilities:
             add:
             - NET_BIND_SERVICE
             drop:
             - ALL
-          readOnlyRootFilesystem: false
-          runAsGroup: 82
-          runAsNonRoot: true
           runAsUser: 101
-          seccompProfile:
-            type: RuntimeDefault
         volumeMounts:
         - mountPath: /usr/local/certificates/
           name: webhook-cert
@@ -515,6 +509,11 @@ spec:
       - name: webhook-cert
         secret:
           secretName: ingress-nginx-admission
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        effect: NoSchedule          
 ---
 apiVersion: batch/v1
 kind: Job
@@ -524,7 +523,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission-create
   namespace: ingress-nginx
 spec:
@@ -535,7 +534,7 @@ spec:
         app.kubernetes.io/instance: ingress-nginx
         app.kubernetes.io/name: ingress-nginx
         app.kubernetes.io/part-of: ingress-nginx
-        app.kubernetes.io/version: 1.12.1
+        app.kubernetes.io/version: 1.8.1
       name: ingress-nginx-admission-create
     spec:
       containers:
@@ -549,24 +548,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.5.2@sha256:e8825994b7a2c7497375a9b945f386506ca6a3eda80b89b74ef2db743f66a5ea
+        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407@sha256:543c40fd093964bc9ab509d3e791f9989963021f1e9e4c9c7b6700b02bfb227b
         imagePullPolicy: IfNotPresent
         name: create
         securityContext:
           allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsGroup: 65532
-          runAsNonRoot: true
-          runAsUser: 65532
-          seccompProfile:
-            type: RuntimeDefault
       nodeSelector:
         kubernetes.io/os: linux
       restartPolicy: OnFailure
+      securityContext:
+        fsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 2000
       serviceAccountName: ingress-nginx-admission
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        effect: NoSchedule      
 ---
 apiVersion: batch/v1
 kind: Job
@@ -576,7 +575,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission-patch
   namespace: ingress-nginx
 spec:
@@ -587,7 +586,7 @@ spec:
         app.kubernetes.io/instance: ingress-nginx
         app.kubernetes.io/name: ingress-nginx
         app.kubernetes.io/part-of: ingress-nginx
-        app.kubernetes.io/version: 1.12.1
+        app.kubernetes.io/version: 1.8.1
       name: ingress-nginx-admission-patch
     spec:
       containers:
@@ -603,24 +602,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.5.2@sha256:e8825994b7a2c7497375a9b945f386506ca6a3eda80b89b74ef2db743f66a5ea
+        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407@sha256:543c40fd093964bc9ab509d3e791f9989963021f1e9e4c9c7b6700b02bfb227b
         imagePullPolicy: IfNotPresent
         name: patch
         securityContext:
           allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsGroup: 65532
-          runAsNonRoot: true
-          runAsUser: 65532
-          seccompProfile:
-            type: RuntimeDefault
       nodeSelector:
         kubernetes.io/os: linux
       restartPolicy: OnFailure
+      securityContext:
+        fsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 2000
       serviceAccountName: ingress-nginx-admission
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        effect: NoSchedule      
 ---
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
@@ -630,7 +629,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: nginx
 spec:
   controller: k8s.io/ingress-nginx
@@ -643,7 +642,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.12.1
+    app.kubernetes.io/version: 1.8.1
   name: ingress-nginx-admission
 webhooks:
 - admissionReviewVersions:
@@ -653,7 +652,6 @@ webhooks:
       name: ingress-nginx-controller-admission
       namespace: ingress-nginx
       path: /networking/v1/ingresses
-      port: 443
   failurePolicy: Fail
   matchPolicy: Equivalent
   name: validate.nginx.ingress.kubernetes.io
