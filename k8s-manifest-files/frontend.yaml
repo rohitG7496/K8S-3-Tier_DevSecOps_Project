@@ -52,7 +52,10 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: dev.jnrpro.solutions
+    - tls:
+      - hosts: 
+        - dev.jnrpro.solutions
+      secretName: letsencrypt-tls
       http: 
         paths: 
           - path: /

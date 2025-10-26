@@ -1,3 +1,42 @@
+##### install cert-manager on kubeadm cluster ###
+
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
+
+kubectl get pods -n cert-manager
+
+## install ebs csi driver ####
+
+kubectl apply -k ebs-csi-driver
+
+#### mysql db credentials ####
+
+user: root
+password: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 🔧 DevOps Tooling Setup Guide on Linux 
 

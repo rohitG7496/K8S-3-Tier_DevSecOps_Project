@@ -562,7 +562,7 @@ spec:
         runAsUser: 2000
       serviceAccountName: ingress-nginx-admission
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/k8master
         effect: NoSchedule
       - key: node-role.kubernetes.io/control-plane
         effect: NoSchedule      
