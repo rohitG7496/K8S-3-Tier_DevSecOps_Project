@@ -83,18 +83,18 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
-  rules:
-    - tls:
-      - hosts: 
-        - dev.jnrpro.solutions
+  tls:
+    - hosts:
+      - dev.jnrpro.solutions
       secretName: letsencrypt-tls
+  rules:
     - host: dev.jnrpro.solutions
-      http: 
-        paths: 
+      http:
+        paths:
           - path: /api
             pathType: Prefix
-            backend: 
+            backend:
               service:
                 name: backend
-                port: 
+                port:
                   number: 5000

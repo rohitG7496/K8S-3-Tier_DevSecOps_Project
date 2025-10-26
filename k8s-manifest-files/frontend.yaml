@@ -51,17 +51,18 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
-  rules:
-    - tls:
-      - hosts: 
-        - dev.jnrpro.solutions
+  tls:
+    - hosts:
+      - dev.jnrpro.solutions
       secretName: letsencrypt-tls
-      http: 
-        paths: 
+  rules:
+    - host: dev.jnrpro.solutions
+      http:
+        paths:
           - path: /
             pathType: Prefix
-            backend: 
+            backend:
               service:
                 name: frontend-svc
-                port: 
+                port:
                   number: 80
