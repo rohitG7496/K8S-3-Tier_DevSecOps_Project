@@ -85,7 +85,7 @@ spec:
   tls:
     - hosts:
       - dev.jnrpro.solutions
-      secretName: letsencrypt-tls
+      secretName: letsencrypt-prod
   rules:
     - host: dev.jnrpro.solutions
       http:
