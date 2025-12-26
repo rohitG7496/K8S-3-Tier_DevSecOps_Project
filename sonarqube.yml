@@ -9,11 +9,12 @@ reclaimPolicy: Retain
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: sonarqube
   namespace: secops
 spec:
+  serviceName: "sonarqube"
   selector:
     matchLabels:
       app: sonarqube
@@ -29,20 +30,23 @@ spec:
             - containerPort: 9000
           resources:
             limits:
-              memory: "1G"
-              cpu: "100m"
+              memory: "4G"
+              cpu: "2.0"
             requests:
-              memory: "3G"
+              memory: "2G"
               cpu: "1.0"
-      volumeClaimTemplates:
-        - metadata:
-            name: data
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            storageClassName: ebs
-            resources:
-              requests:
-                storage: 5Gi
+          volumeMounts:
+            - name: data
+              mountPath: /opt/sonarqube/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ebs
+        resources:
+          requests:
+            storage: 5Gi
 
 ---
 apiVersion: v1
