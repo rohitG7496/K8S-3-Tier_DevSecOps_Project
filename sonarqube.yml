@@ -92,6 +92,10 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - sonar.jnrpro.solutions
+      secretName: letsencrypt-tls
   rules:
     - host: sonar.jnrpro.solutions
       http:
