@@ -30,7 +30,7 @@ spec:
             - sh
             - -c
             - |
-              chown -R 999:999 /opt/sonarqube/data
+              chown -R 1000:1000 /opt/sonarqube/data
               sysctl -w vm.max_map_count=262144
           securityContext:
             privileged: true
@@ -38,9 +38,13 @@ spec:
             - name: data
               mountPath: /opt/sonarqube/data
 
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: sonarqube
           image: sonarqube:lts
+          securityContext:
+            runAsUser: 1000
           ports:
             - containerPort: 9000
           resources:
