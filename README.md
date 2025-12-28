@@ -41,7 +41,7 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 ---
 
-## 2. CI/CD Tools Setup
+## 2. CI/CD Tools Setup for DevSecOps
 
 ### 2.1 SonarQube Setup
 Deploy SonarQube using the provided manifest:
