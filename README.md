@@ -58,6 +58,11 @@ kubectl apply -f jenkins.yml
 ```
 *   **Access**: `https://jenkins.jnrpro.solutions`
 
+To retrieve the initial admin password:
+```bash
+kubectl logs jenkins-0 -n base | grep -A 5 "Jenkins initial setup is required"
+```
+
 ### 2.3 ArgoCD Setup
 Deploy ArgoCD for GitOps:
 ```bash
