@@ -1,6 +1,6 @@
 ---
-apiversion: storage.k8s.io/v1
-kind: storageClass
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
   name: jenkins
   namespace: base
@@ -10,7 +10,7 @@ reclaimPolicy: Retain
 
 ---
 apiVersion: apps/v1
-kind: statefulset
+kind: StatefulSet
 metadata:
   namespace: base
   name: jenkins
@@ -35,9 +35,9 @@ spec:
           command: ["sh", "-c", "chown -R 1000:1000 /var/lib/jenkins"]
           securityContext:
             privileged: true
-            volumeMounts:
-              - name: jenkins-data
-                mountPath: /var/lib/jenkins
+          volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/lib/jenkins
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
@@ -66,13 +66,13 @@ metadata:
   name: jenkins
   namespace: base
 spec:
-  selectors:
+  selector:
     app: jenkins
-    ports:
-      - port: 8080
-        targetPort: 8080
-      - port: 50000
-        targetPort: 50000
+  ports:
+    - port: 8080
+      targetPort: 8080
+    - port: 50000
+      targetPort: 50000
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -87,9 +87,9 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:
-    -hosts:
-      - jenkins.jnrpro.solutions
-    secretName: letsencrypt-tls
+    - hosts:
+        - jenkins.jnrpro.solutions
+      secretName: letsencrypt-tls
   rules:
     - host: jenkins.jnrpro.solutions
       http:
